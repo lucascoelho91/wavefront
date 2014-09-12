@@ -202,7 +202,7 @@ class wavefront{
 
 int main( int argc, char** argv )
 {
-    ros::init(argc, argv, "PID");
+    ros::init(argc, argv, "wavefront");
     ros::NodeHandle n; 
     
 	double discretization, resolution;
@@ -211,22 +211,22 @@ int main( int argc, char** argv )
 
     rgb color(255, 0, 0);
 
-    if(ros::param::get("/graph/discretization", discretization));
+    if(ros::param::get("/wavefront/discretization", discretization));
     else{
         ROS_INFO("Error getting parameter square size parameter");
         exit(1);
     }
-    if(ros::param::get("/graph/resolution", resolution));
+    if(ros::param::get("/wavefront/resolution", resolution));
     else{
         ROS_INFO("Error getting parameter: resolution");
         exit(1);
     }
-    if(ros::param::get("/graph/map",mapFile));
+    if(ros::param::get("/wavefront/map",mapFile));
     else{
         ROS_INFO("Error getting parameter: map file.");
         exit(1);
     }
-     if(ros::param::get("/graph/outmap",outFile));
+     if(ros::param::get("/wavefront/outmap",outFile));
     else{
         ROS_INFO("Error getting parameter: out file.");
         exit(1);
@@ -237,8 +237,8 @@ int main( int argc, char** argv )
 	Grafo.BuildGraph(threshold); 
 
 
-	robot rbx(0, 0, color, "robot_");
-	goal gx;
+	robot rbx(0, 0, color, "robot_", n);
+	goal gx(n);
 
 	wavefront wvf(&Grafo, &rbx, &gx);
 

@@ -9,9 +9,9 @@ void robot::setSpeedPublisher(ros::NodeHandle& nh){
 	speedPub = nh.advertise<geometry_msgs::Twist>(topicName, 10);
 }
 
-void robot::setPoseSubscriber(ros::NodeHandle * nh){
+void robot::setPoseSubscriber(ros::NodeHandle& nh){
 	std::string topicName = std::string("robot_") + boost::lexical_cast<std::string>(this->id) + std::string("/base_pose_ground_truth");
-	poseSub = nh->subscribe(topicName.c_str(), 10, &robot::poseCallback, this); 
+	poseSub = nh.subscribe(topicName.c_str(), 10, &robot::poseCallback, this); 
 }
 
 void robot::poseCallback(const nav_msgs::Odometry::ConstPtr& msg){
@@ -50,9 +50,11 @@ std::string robot::getName(){
 
 robot::robot(int id, double weight, 
 	   		 rgb color,
-	    	 std::string name){
+	    	 std::string name, ros::NodeHandle& nh){
 	this->id = id;
 	this->weight = weight;
 	this->color = color;
 	this->rname = name;
+	setPoseSubscriber(nh);
+	setSpeedPublisher(nh);
 }

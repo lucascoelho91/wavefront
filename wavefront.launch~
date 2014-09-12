@@ -1,0 +1,19 @@
+<launch>
+    <param name="graph/map" type="string" 
+           value="$(find voronoi)/map.pgm" />
+
+	<param name="graph/outmap" type="string" 
+           value="$(find voronoi)/result.ppm" />
+
+    <!-- Discretization - obstacle value threshold -->
+    <param name="graph/threshold" type="int" value="250"/>
+
+    <!-- resolution of the map -->
+    <param name="graph/resolution" type="double" value="0.05"/>
+
+    <!-- discretization of the pixels -->
+    <param name="graph/discretization" type="double" value="10.0"/>
+
+    <node name="wavefront" pkg="wavefront" type="wavefront_node"
+          output="screen" />
+</launch>

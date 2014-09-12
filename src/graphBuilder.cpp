@@ -342,22 +342,22 @@ int main( int argc, char** argv )
     int threshold = 250;
     std::string mapFile, outFile;
 
-    if(ros::param::get("/graph/discretization", discretization));
+    if(ros::param::get("/wavefront/discretization", discretization));
     else{
         ROS_INFO("Error getting parameter square size parameter");
         exit(1);
     }
-    if(ros::param::get("/graph/resolution", resolution));
+    if(ros::param::get("/wavefront/resolution", resolution));
     else{
         ROS_INFO("Error getting parameter: resolution");
         exit(1);
     }
-    if(ros::param::get("/graph/map",mapFile));
+    if(ros::param::get("/wavefront/map",mapFile));
     else{
         ROS_INFO("Error getting parameter: map file.");
         exit(1);
     }
-     if(ros::param::get("/graph/outmap",outFile));
+     if(ros::param::get("/wavefront/outmap",outFile));
     else{
         ROS_INFO("Error getting parameter: out file.");
         exit(1);

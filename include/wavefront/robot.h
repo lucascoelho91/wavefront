@@ -37,12 +37,13 @@ class robot
 
 		void publishSpeed();
 		void setSpeedPublisher(ros::NodeHandle& nh);
-		void setPoseSubscriber(ros::NodeHandle* nh);
+		void setPoseSubscriber(ros::NodeHandle& nh);
 		void setSpeed(double v, double w);
 		void setWeight(double p);
 		double getPower();
 		std::string getName();
-		robot(int id, double weight, rgb color, std::string name);
+		robot(int id, double weight, rgb color,
+			  std::string name, ros::NodeHandle& nh);
 
 		void setSpeedHolo(double dx, double dy);
 
