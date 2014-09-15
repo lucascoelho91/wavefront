@@ -40,10 +40,10 @@ class graph  //
         Vector2 dim;
         Vector2 sizeMap; //tamanho em metros do mapa
 
-        Vector2 vertices;
+        
 
-        int squareSize;        //tamanho do quadrado que um vértice ocupa, EM PIXELS
-        int sizeMetersPixel;
+        double squareSize;        //tamanho do quadrado que um vértice ocupa, EM PIXELS
+        double sizeMetersPixel;
 
         int8_t drawLines; //especifica śe é para desenhar linhas na visualização do grafo montado
 
@@ -51,6 +51,7 @@ class graph  //
         FILE* outmap;
 
     public:
+        Vector2 vertices;
         void BuildGraph(int threshold);        //monta o grafo, lendo o mapa de entrada, inicializando os vértices e estabelecendo os vizinhos
 
         void clearGraph(); //limpa o grafo, zerando os valores de owner, visited, have_robot, entre outros

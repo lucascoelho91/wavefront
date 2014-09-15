@@ -6,12 +6,17 @@ void robot::publishSpeed(){
 
 void robot::setSpeedPublisher(ros::NodeHandle& nh){
 	std::string topicName = std::string("robot_") + boost::lexical_cast<std::string>(this->id) + std::string("/cmd_vel");
-	speedPub = nh.advertise<geometry_msgs::Twist>(topicName, 10);
+	speedPub = nh.advertise<geometry_msgs::Twist>(topicName, 1);
+}
+
+double robot::getYaw()
+{
+	return tf::getYaw(poseOdom.pose.pose.orientation);
 }
 
 void robot::setPoseSubscriber(ros::NodeHandle& nh){
 	std::string topicName = std::string("robot_") + boost::lexical_cast<std::string>(this->id) + std::string("/base_pose_ground_truth");
-	poseSub = nh.subscribe(topicName.c_str(), 10, &robot::poseCallback, this); 
+	poseSub = nh.subscribe(topicName.c_str(), 1, &robot::poseCallback, this); 
 }
 
 void robot::poseCallback(const nav_msgs::Odometry::ConstPtr& msg){
@@ -31,7 +36,7 @@ void robot::setSpeedHolo(double dx, double dy){
 	double yaw = tf::getYaw(poseOdom.pose.pose.orientation);
 
 	v = 1*(cos(yaw)*dx + sin(yaw)*dy);
-    w = 0.05*(-sin(yaw)*dx/0.05 + cos(yaw)*dy/0.05);
+    w = 0.2*(-sin(yaw)*dx/0.05 + cos(yaw)*dy/0.05);
                 
 	setSpeed(v, w);
 }

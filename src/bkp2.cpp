@@ -35,7 +35,7 @@ class goal{
 
 		void poseCallback(const nav_msgs::Odometry::ConstPtr& msg){
 			this->poseOdom = *msg;
-			if( fabs(pose.x - poseOdom.pose.pose.position.x)>0.5 || fabs(pose.y - poseOdom.pose.pose.position.y)>0.5)
+			if( abs(pose.x - poseOdom.pose.pose.position.x)>0.5 || abs(pose.y - poseOdom.pose.pose.position.y)>0.5)
 			{
 				newPose = 1;
 				ROS_INFO("GOAL changed its position! Asking to recalculate the trajectory\n");
@@ -118,14 +118,16 @@ class wavefront{
 				PQ.pop();        // and removes it
 				n = w.vNode;
 				//printf("popped\n");
+
+				if(w.cost > n->powerDist) continue;
+
 				for(int i = 0; i < 8; i = i+2)
 				{
 					neighbor = n->neighbor[i];
 					//printf("opa\n");
 					if(neighbor!=NULL && (n->powerDist + 1 < neighbor->powerDist))
 					{
-						if(i==6)
-							printf("eita %f\n", n->powerDist);
+						//printf("eita\n");
 						wavefrontCost o;
 						o.cost = n->powerDist + 1;
 						o.vNode = neighbor;
@@ -158,40 +160,25 @@ class wavefront{
 		{
 			node* nodeRobot = grafo->getNodeByPose(robo->pose);
 			node* nodeGoal = grafo->getNodeByPose(alvo->pose);
-			
-			static double lastdx, lastdy;
+
+			//printf("nav\n");
 			node* subgoal;
 			double lowCost = HUGE_VAL;
-
-			if(nodeRobot==NULL)
+			for(int i=0; i<8; i = i + 2)
 			{
-				robo->setSpeedHolo(lastdx, lastdy);
-				robo->publishSpeed();
-				return;
-			}
-
-			node n;
-			for(int i=0; i<8; i++)
-			{
+				//printf("1\n");
 				if(nodeRobot->neighbor[i]!=NULL)
 				{
-					n = *nodeRobot->neighbor[i];
-					if(i==6)
-						n.powerDist-=1;
-					if(n.powerDist < lowCost )
+					//printf("2\n");
+					if(nodeRobot->neighbor[i]->powerDist < lowCost)
 					{
+						//printf("3\n");
 						subgoal = nodeRobot->neighbor[i];
 						lowCost = subgoal->powerDist;
+						//printf("4\n");
 					}
 				}
-				else
-				{
-					if(i==6)
-						printf("eita porra\n");
-				}
 			}
-			printf("cost: %f\n", lowCost);
-
 
 			double dx = subgoal->pose.x - robo->pose.x;
 			double dy = subgoal->pose.y - robo->pose.y;
@@ -200,17 +187,11 @@ class wavefront{
 			{
 				if(subgoal==nodeGoal)
 				{
-					dx = alvo->pose.x - robo->pose.x;
-					dy = alvo->pose.y - robo->pose.y;
-					printf("distance %f %f\n", dx, dy);
-					if(fabs(dx) < 0.4 && fabs(dy) < 0.4)
-					{
-						printf("dx %f dy %f\n", fabs(dx), fabs(dy));
-						ROS_INFO("GOAL REACHED.");
-						alvo->newPose = 0;
-						robo->setSpeed(0, 0);
-						alvo->onNav = 0;
-					}
+					ROS_INFO("GOAL REACHED.");
+					alvo->newPose = 0;
+					robo->setSpeed(0, 0);
+					alvo->onNav = 0;
+
 				}
 			}
 			else
@@ -218,8 +199,6 @@ class wavefront{
 				robo->setSpeedHolo(dx, dy);
 			}
 			robo->publishSpeed();
-			lastdy = dy;
-			lastdx = dx;
 			//printf("bye nav\n");
 		}
 

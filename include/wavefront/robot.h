@@ -42,6 +42,7 @@ class robot
 		void setWeight(double p);
 		double getPower();
 		std::string getName();
+		double getYaw();
 		robot(int id, double weight, rgb color,
 			  std::string name, ros::NodeHandle& nh);
 

@@ -32,7 +32,13 @@ node* graph::getNodeByIndex(int x, int y)
 
 node* graph::getNodeByPose(Vector2 p)
 {
-    return matrixGraph[ (int) p.y/squareSize][ (int) p.x/squareSize];
+    int x, y;
+    //printf("pose: x: %f, y: %f\n", p.x, p.y);
+    //printf("discr: %f, resolution: %f\n", squareSize, sizeMetersPixel);
+    x = (int) p.x/(squareSize*sizeMetersPixel);
+    y = (int) p.y/(squareSize*sizeMetersPixel);
+    //printf("cell >>> x: %d, y: %d\n", x, y);
+    return matrixGraph[y][x];
 }
 
 void graph::openMapFile(char* file, char* outFile)
@@ -128,7 +134,12 @@ void graph::clearGraph()
     {
         for(int j=0; j<vertices.x; j++)
         {
-            matrixGraph[i][j]->powerDist = 0;
+            if (matrixGraph[i][j]!=NULL)
+            {
+                matrixGraph[i][j]->powerDist = HUGE_VAL;
+                matrixGraph[i][j]->s = NULL;
+            }
+            
         }
     }
 }
@@ -193,6 +204,7 @@ void graph::connectNeighbors()
                         if((i+k)>=0 && (j+l)>=0 && (i+k)<vertices.y && (j+l)<vertices.x)
                         {
                             x=coord(k,l);  //CALCULA O NÚMERO DO VIZINHO DO VÉRTICE
+                            printf("%d\n", x);
                             if (matrixGraph[(i+k)][(j+l)]!=NULL)
                             {
                                 matrixGraph[i][j]->neighbor[x]=matrixGraph[i+k][j+l];
@@ -242,6 +254,8 @@ graph::graph (double sizeDiscretization, char* file, double sizeMetersPixel, cha
     openMapFile(file, outFile);
 
     squareSize = sizeDiscretization;
+    this->sizeMetersPixel = sizeMetersPixel;
+    printf("squareSize %f\n", squareSize);
     char* str = (char*) malloc(100*sizeof(char));
     //OS FGETS CAPTURAM AS INFORMAÇÕES QUE NÃO SERÃO UTILIZADAS NO PROGRAMA
 
