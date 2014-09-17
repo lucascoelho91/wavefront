@@ -109,7 +109,7 @@ class wavefront{
 
 			PQ.push(w);
 
-			printf("oi\n");
+			//printf("oi\n");
 
 			while(!PQ.empty() || n == nodeRobot)
 			{
@@ -124,8 +124,8 @@ class wavefront{
 					//printf("opa\n");
 					if(neighbor!=NULL && (n->powerDist + 1 < neighbor->powerDist))
 					{
-						if(i==6)
-							printf("eita %f\n", n->powerDist);
+						//if(i==6)
+							//printf("eita %f\n", n->powerDist);
 						wavefrontCost o;
 						o.cost = n->powerDist + 1;
 						o.vNode = neighbor;
@@ -133,7 +133,7 @@ class wavefront{
 						o.vNode->powerDist = o.cost;
 						o.vNode->s = n;
 						PQ.push(o);
-						printf("cost %f \n", o.cost);
+						//printf("cost %f \n", o.cost);
 					}
 				}
 
@@ -186,11 +186,11 @@ class wavefront{
 				}
 				else
 				{
-					if(i==6)
-						printf("eita porra\n");
+					//if(i==6)
+						//printf("eita porra\n");
 				}
 			}
-			printf("cost: %f\n", lowCost);
+			//printf("cost: %f\n", lowCost);
 
 
 			double dx = subgoal->pose.x - robo->pose.x;
@@ -202,7 +202,7 @@ class wavefront{
 				{
 					dx = alvo->pose.x - robo->pose.x;
 					dy = alvo->pose.y - robo->pose.y;
-					printf("distance %f %f\n", dx, dy);
+					//printf("distance %f %f\n", dx, dy);
 					if(fabs(dx) < 0.4 && fabs(dy) < 0.4)
 					{
 						printf("dx %f dy %f\n", fabs(dx), fabs(dy));
